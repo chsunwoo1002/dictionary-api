@@ -1,1 +1,1 @@
-# ditionary-api
+# dictionary-api
