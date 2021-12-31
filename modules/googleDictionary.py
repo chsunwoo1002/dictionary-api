@@ -1,7 +1,12 @@
 import requests
 import json
 
-callback, payload, results = "feature-callback","payload", "single_results"
+callback, payload, results, entry = "feature-callback", "payload", "single_results", "entry"
+headword, phonetics, senseFamilies = "headword", "phonetics", "sense_families"
+text, oxfordAudio = "text", "oxford_audio"
+partsOfSpeech, value, senses = "parts_of_speech", "value", "senses"
+definition, examples, exampleGroups, additionalExamples, thesaurusEntries, antonyms, synonyms,nym, nyms = "definition","examples","example_groups","additional_examples","thesaurus_entries","antonyms","synonyms","nym", "nyms"
+
 def queryWord(word, language):
   # header shall be implemented
   key = {
@@ -10,16 +15,53 @@ def queryWord(word, language):
     "async" : f"term:{word},corpus:{language},hhdr:true,hwdgt:true,wfp:true,ttl:,tsl:,ptl:"
 
   }
-  response = requests.get("https://www.google.com/async/callback:5493", params=key, headers=headerObject)
+  response = requests.get("https://www.google.com/async/callback:5493", params=key)
+  if response.status_code == 200:
+    return json.loads(response.text[4:])[callback][payload][results][0][entry]
   # error handler shall be implmented
-  return json.loads(response.text[4:])
+  return 0
 
 def findWord(word, language):
-  wordObject = queryWord(word, language)
-  return parseObject(wordObject)
+  data = queryWord(word, language)
+  return parseData(data)
 
-def parseObject(obj):
-  # filter object elements
-  return obj
-s = findWord("apple", "en-US")
+def parseData(data):
+  dictionaryData = {}
+  dictionaryData["word"] = data[headword]
+  dictionaryData["phonetics"] = list(map(getPhonetics, data[phonetics]))
+  dictionaryData["meaning"] = list(map(getMeaning, data[senseFamilies]))
+  return dictionaryData
+
+def getPhonetics(phoneticData):
+  result = {}
+  result["text"] = phoneticData[text]
+  if "oxford_audio" in phoneticData:
+    result["audio"] = phoneticData[oxfordAudio]
+  return result
+
+def getMeaning(meaningData):
+  result = {}
+  result["partOfSpeech"] = meaningData[partsOfSpeech][0][value]
+  result["definitions"] = list(map(getDefinitions, meaningData[senses]))
+    
+  return result
+
+definition, examples, exampleGroups, additionalExamples, thesaurusEntries, antonyms, synonyms,nym, nyms = "definition","examples","example_groups","additional_examples","thesaurus_entries","antonyms","synonyms","nym", "nyms"
+
+def getDefinitions(definitionData):
+  result = {}
+  result["definition"] = definitionData[definition][text]
+  result["examples"] = []
+  if exampleGroups in definitionData:
+    result["examples"] = list(map(lambda example: example[examples][0], definitionData[exampleGroups]))
+  if additionalExamples in definitionData:
+    result["examples"].extend(definitionData[additionalExamples])
+  if thesaurusEntries in definitionData:
+    if antonyms in definitionData[thesaurusEntries][0]:
+      result["antonyms"] = list(map(lambda antonym: antonym[nym], definitionData[thesaurusEntries][0][antonyms][0][nyms]))
+    if synonyms in definitionData[thesaurusEntries][0]:
+      result["synonyms"] = list(map(lambda antonym: antonym[nym], definitionData[thesaurusEntries][0][synonyms][0][nyms]))
+  return result
+s = findWord("imperative", "en-US")
+
 print(s)
