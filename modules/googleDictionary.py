@@ -1,6 +1,8 @@
 import requests
 import json
+import errorHandler
 
+# put variables in utils.py
 callback, payload, results, entry = "feature-callback", "payload", "single_results", "entry"
 headword, phonetics, senseFamilies = "headword", "phonetics", "sense_families"
 text, oxfordAudio = "text", "oxford_audio"
@@ -15,21 +17,34 @@ def queryWord(word, language):
     "async" : f"term:{word},corpus:{language},hhdr:true,hwdgt:true,wfp:true,ttl:,tsl:,ptl:"
 
   }
-  response = requests.get("https://www.google.com/async/callback:5493", params=key)
-  if response.status_code == 200:
-    return json.loads(response.text[4:])[callback][payload][results][0][entry]
-  # error handler shall be implmented
-  return 0
+  try:
+    response = requests.get("https://www.google.com/async/callback:5493", params=key)
+  except requests.HTTPError:
+    print("HTTP error occurs")
+  except requests.ConnectionError:
+    print("Connection Error occurs")
+  else:
+    print(response.status_code)
+    if response.status_code == 200:
+      return parseData(json.loads(response.text[4:])[callback][payload][results][0][entry])
+    if response.status_code == 500: # server error
+      print("code 500 server error")
+    if response.status_code == 404: # page not found error
+      print("page not found")
+    return 0
 
 def findWord(word, language):
   data = queryWord(word, language)
+  
   return parseData(data)
 
 def parseData(data):
   dictionaryData = {}
+  dictionaryData["type"] = "data"
   dictionaryData["word"] = data[headword]
   dictionaryData["phonetics"] = list(map(getPhonetics, data[phonetics]))
   dictionaryData["meaning"] = list(map(getMeaning, data[senseFamilies]))
+  
   return dictionaryData
 
 def getPhonetics(phoneticData):
@@ -37,6 +52,7 @@ def getPhonetics(phoneticData):
   result["text"] = phoneticData[text]
   if "oxford_audio" in phoneticData:
     result["audio"] = phoneticData[oxfordAudio]
+  
   return result
 
 def getMeaning(meaningData):
@@ -45,8 +61,6 @@ def getMeaning(meaningData):
   result["definitions"] = list(map(getDefinitions, meaningData[senses]))
     
   return result
-
-definition, examples, exampleGroups, additionalExamples, thesaurusEntries, antonyms, synonyms,nym, nyms = "definition","examples","example_groups","additional_examples","thesaurus_entries","antonyms","synonyms","nym", "nyms"
 
 def getDefinitions(definitionData):
   result = {}
@@ -61,7 +75,10 @@ def getDefinitions(definitionData):
       result["antonyms"] = list(map(lambda antonym: antonym[nym], definitionData[thesaurusEntries][0][antonyms][0][nyms]))
     if synonyms in definitionData[thesaurusEntries][0]:
       result["synonyms"] = list(map(lambda antonym: antonym[nym], definitionData[thesaurusEntries][0][synonyms][0][nyms]))
+  
   return result
-s = findWord("imperative", "en-US")
+
+
+s = queryWord("imperatidfasdve", "en-US")
 
 print(s)
