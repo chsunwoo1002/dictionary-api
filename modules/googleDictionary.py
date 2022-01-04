@@ -20,17 +20,17 @@ def queryWord(word, language):
   try:
     response = requests.get("https://www.google.com/async/callback:5493", params=key)
   except requests.HTTPError:
-    print("HTTP error occurs")
+    return errorHandler.HTTPError()
   except requests.ConnectionError:
-    print("Connection Error occurs")
+    return errorHandler.connectionError()
   else:
     print(response.status_code)
     if response.status_code == 200:
       return parseData(json.loads(response.text[4:])[callback][payload][results][0][entry])
     if response.status_code == 500: # server error
-      print("code 500 server error")
+      return errorHandler.serverError()
     if response.status_code == 404: # page not found error
-      print("page not found")
+      return errorHandler.pageNotFoundError()
     return 0
 
 def findWord(word, language):
@@ -77,8 +77,3 @@ def getDefinitions(definitionData):
       result["synonyms"] = list(map(lambda antonym: antonym[nym], definitionData[thesaurusEntries][0][synonyms][0][nyms]))
   
   return result
-
-
-s = queryWord("imperatidfasdve", "en-US")
-
-print(s)
