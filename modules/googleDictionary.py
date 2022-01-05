@@ -1,6 +1,6 @@
 import requests
 import json
-import errorHandler
+import modules.errorHandler as errorHandler
 
 # put variables in utils.py
 callback, payload, results, entry = "feature-callback", "payload", "single_results", "entry"
@@ -24,7 +24,6 @@ def queryWord(word, language):
   except requests.ConnectionError:
     return errorHandler.connectionError()
   else:
-    print(response.status_code)
     if response.status_code == 200:
       return parseData(json.loads(response.text[4:])[callback][payload][results][0][entry])
     if response.status_code == 500: # server error
