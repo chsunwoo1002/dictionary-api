@@ -15,15 +15,15 @@ def home():
 def pageNotFound(e):
     return "<h1>404</h1><p>The resource could not be found.</p>", 404
 
-@app.route('/api/v1/searches', methods=['GET'])
+@app.route('/dictionary-api/v1/word', methods=['GET'])
 def apiSearch():
   # Check if an search was provided as part of the URL.
   # If search is provided, assign it to a variable.
   # If no search is provided, display an error in the browser.
-  if 'search' in request.args:
-    searchWord = request.args['search']
+  if 'word' in request.args:
+    searchWord = request.args['word']
   else:
-    return "Error: No search field provided. Please specify an searching word."
+    return "Error: No word field provided. Please specify an searching word."
 
   # Check if an language was provided as part of the URL.
   # If language is provided, assign it to a variable.
@@ -41,5 +41,3 @@ def apiSearch():
   # Use the jsonify function from Flask to convert our list of
   # Python dictionaries to the JSON format.
   return jsonify(result)
-
-app.run()
