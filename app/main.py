@@ -7,9 +7,7 @@ app.config["DEBUG"] = True
 
 @app.route('/', methods=['GET'])
 def home():
-    return '''<h1>Google Dictionary API</h1>
-<p>A prototype API for distant words</p>
-<p>Usage example:/api/v1/searches?search=apple&language=en-US </p>'''
+    return '''<h1>Dictionary API with google crawling</h1>'''
 
 @app.errorhandler(404)
 def pageNotFound(e):
