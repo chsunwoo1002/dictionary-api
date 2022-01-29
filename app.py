@@ -41,3 +41,6 @@ def apiSearch():
   # Use the jsonify function from Flask to convert our list of
   # Python dictionaries to the JSON format.
   return jsonify(result)
+
+if __name__ == "__main__":
+    app.run(debug=True)
