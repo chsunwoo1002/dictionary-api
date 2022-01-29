@@ -34,8 +34,11 @@ def apiSearch():
   # get JSON which is about searching word
   # If it successfully finds, it returns "data" in type key
   # If it does not successfully find, it returns "error" in type key
+  print("here")
   result = queryWord(searchWord, language)
 
   # Use the jsonify function from Flask to convert our list of
   # Python dictionaries to the JSON format.
   return jsonify(result)
+
+app.run()
