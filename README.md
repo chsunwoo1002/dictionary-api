@@ -7,7 +7,7 @@ For now, API supports English only(en-US)
 
 ## Usage
 
-GET https://dictionary-api-flask.herokuapp.com/dictionary-api/v1/word?word=<searching word>&language=en-US
+GET https://dictionary-api-flask.herokuapp.com/dictionary-api/v1/word?word=<word>&language=<en-US>
 
 ## Example output
 
