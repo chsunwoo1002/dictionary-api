@@ -6,8 +6,11 @@ The dictionary API crawled word from google and parse the data in JSON format
 For now, API supports English only(en-US)
 
 ## Usage
-
-GET [https://dictionary-api-flask.herokuapp.com/dictionary-api/v1/word?word=<word>&language=<en-US>](https://dictionary-api-flask.herokuapp.com/dictionary-api/v1/word?word=example&language=en-US)
+Syntax usage
+GET https://dictionary-api-flask.herokuapp.com/dictionary-api/v1/word?word=<word>&language=<en-US>
+  
+Example usage
+GET [https://dictionary-api-flask.herokuapp.com/dictionary-api/v1/word?word=example&language=en-US](https://dictionary-api-flask.herokuapp.com/dictionary-api/v1/word?word=example&language=en-US)
 
 ## Example output
 
