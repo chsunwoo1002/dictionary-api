@@ -125,10 +125,10 @@ GET [https://dictionary-api-flask.herokuapp.com/dictionary-api/v1/word?word=exam
   "word": "imperative"
 }
 ```
-## Tasks to be finished
-- [ x ] Implement data crawling function
-- [ x ] Parse data into JSON format
-- [ x ] Implement API with Flask
-- [ x ] Deploy API
-- [  ] Write test cases
-- [  ] Implement CI/CD workflow
+## Milestone
+  - [x] Implement data crawling function
+  - [x] Parse data into JSON format
+  - [x] Implement API with Flask
+  - [x] Deploy API
+  - [] Write test cases
+  - [] Implement CI/CD workflow
