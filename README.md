@@ -130,5 +130,5 @@ GET [https://dictionary-api-flask.herokuapp.com/dictionary-api/v1/word?word=exam
   - [x] Parse data into JSON format
   - [x] Implement API with Flask
   - [x] Deploy API
-  - [] Write test cases
-  - [] Implement CI/CD workflow
+  - [ ] Write test cases
+  - [ ] Implement CI/CD workflow
