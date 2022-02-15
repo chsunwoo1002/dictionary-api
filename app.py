@@ -14,7 +14,7 @@ def home():
 def pageNotFound(e):
     return "<h1>404</h1><p>The resource could not be found.</p>", 404
 
-@app.route('/dictionary-api/v1/word', methods=['GET'])
+@app.route('/dictionary-api/v1/', methods=['GET'])
 def apiSearch():
   # Check if an search was provided as part of the URL.
   # If search is provided, assign it to a variable.
