@@ -15,8 +15,16 @@ usageMessage = json.dumps(
   })
 pageNotFoundErrorMessage = json.dumps(
   {
-    'code' : 404,
-    'detail' : '''the page you were trying to reach on a website couldn't be found on the server.'''
+   'code': 404, 
+   'name': 'Not Found', 
+   'description': 'The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.'
+  }
+)
+notAllowedErrorMessage = json.dumps(
+  {
+    "code": 405, 
+    "name": "Method Not Allowed", 
+    "description": "The method is not allowed for the requested URL."
   }
 )
 badRequestErrorMessage = json.dumps(
@@ -32,6 +40,7 @@ unprocessableEntityMessage = json.dumps(
     'detail' : '''server is unable to process the contained instructions. Please check parameters.'''
   }
 )
+
 # variables for crawling 
 callback, payload, results, entry = 'feature-callback', 'payload', 'single_results', 'entry'
 headword, phonetics, senseFamilies = 'headword', 'phonetics', 'sense_families'
