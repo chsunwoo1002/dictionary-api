@@ -1,8 +1,8 @@
 from distutils.debug import DEBUG
-import json
 from flask import request, jsonify, Flask
 from modules.googleDictionary import queryWord
 from modules.utils import *
+from werkzeug.exceptions import HTTPException
 
 app = Flask(__name__)
 app.config.from_mapping(
@@ -17,18 +17,20 @@ def home():
 @app.route('/usage', methods=['GET'])
 def usage():
   return usageMessage
-
-@app.errorhandler(400)
-def badRequest():
-  return pageNotFoundErrorMessage, 400
-
-@app.errorhandler(404)
-def pageNotFound():
-  return badRequestErrorMessage, 404
-
-@app.errorhandler(422)
-def unprocessableEntity():
-  return unprocessableEntityMessage, 422
+  
+@app.errorhandler(HTTPException)
+def handle_exception(e):
+    """Return JSON instead of HTML for HTTP errors."""
+    # start with the correct headers and status code from the error
+    response = e.get_response()
+    # replace the body with JSON
+    response.data = json.dumps({
+        "code": e.code,
+        "name": e.name,
+        "description": e.description,
+    })
+    response.content_type = "application/json"
+    return response
 
 @app.route('/dictionary-api/v1/', methods=['GET'])
 def apiSearch():
@@ -38,7 +40,7 @@ def apiSearch():
   if 'word' in request.args:
     searchWord = request.args['word']
   else:
-    raise unprocessableEntity()
+    raise 'raise unprocessableEntity()'
 
   # Check if an language was provided as part of the URL.
   # If language is provided, assign it to a variable.
@@ -46,7 +48,7 @@ def apiSearch():
   if 'language' in request.args:
     language = request.args['language']
   else:
-    return unprocessableEntity()
+    raise 'return unprocessableEntity()'
 
   # get JSON which is about searching word
   # If it successfully finds, it returns "data" in type key
