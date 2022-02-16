@@ -1,8 +1,8 @@
-from flask import jsonify
+import json
 
 # json variables for app
-welcomeMessage = jsonify({'message': 'Welcome to Dictionary API with google crawling'})
-usageMessage = jsonify(
+welcomeMessage = json.dumps({'message':'Welcome to Dictionary API with google crawling'})
+usageMessage = json.dumps(
   {
     'message': 'Basic usage of API', 
     'endPoints': {
@@ -13,20 +13,20 @@ usageMessage = jsonify(
     'example' : 'https://dictionary-api-flask.herokuapp.com/dictionary-api/v1/word=apple&language=en-US',
     'supportedLanguage' : ['en-Us']
   })
-pageNotFoundErrorMessage = jsonify(
+pageNotFoundErrorMessage = json.dumps(
   {
     'code' : 404,
     'detail' : '''the page you were trying to reach on a website couldn't be found on the server.'''
   }
 )
-badRequestErrorMessage = jsonify(
+badRequestErrorMessage = json.dumps(
   {
     'code' : 400,
     'detail' : '''server is unable to process the request sent by the client.'''
   }
 )
 
-unprocessableEntityMessage =  jsonify(
+unprocessableEntityMessage = json.dumps(
   {
     'code' : 422,
     'detail' : '''server is unable to process the contained instructions. Please check parameters.'''
