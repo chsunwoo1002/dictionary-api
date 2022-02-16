@@ -1,18 +1,29 @@
-import flask
+from distutils.debug import DEBUG
 from flask import request, jsonify, Flask
 from modules.googleDictionary import queryWord
 
 app = Flask(__name__)
-app.config["DEBUG"] = True
+app.config.from_mapping(
+  DEBUG=True,
+  TESTING=True,
+)
+
 
 @app.route('/', methods=['GET'])
 def home():
-    return '''<h1>Dictionary API with google crawling</h1>
-    Usage:/word?word=searching word&language=en-US'''
+  return '<h1>Dictionary API with google crawling</h1>'
+
+@app.route('/usage', method=['GET'])
+def usage():
+  return '<h1>Usage:/word=word&language=en-US</h1>'
+
+@app.errorhandler(400)
+def badRequest(e):
+  return "<h1>400</h1><p>The resource could not be found.</p>", 400
 
 @app.errorhandler(404)
 def pageNotFound(e):
-    return "<h1>404</h1><p>The resource could not be found.</p>", 404
+  return "<h1>404</h1><p>The resource could not be found.</p>", 404
 
 @app.route('/dictionary-api/v1/', methods=['GET'])
 def apiSearch():
@@ -35,7 +46,6 @@ def apiSearch():
   # get JSON which is about searching word
   # If it successfully finds, it returns "data" in type key
   # If it does not successfully find, it returns "error" in type key
-  print("here")
   result = queryWord(searchWord, language)
 
   # Use the jsonify function from Flask to convert our list of
