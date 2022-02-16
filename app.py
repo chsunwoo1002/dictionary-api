@@ -1,6 +1,8 @@
 from distutils.debug import DEBUG
+import json
 from flask import request, jsonify, Flask
 from modules.googleDictionary import queryWord
+from modules.utils import *
 
 app = Flask(__name__)
 app.config.from_mapping(
@@ -8,22 +10,25 @@ app.config.from_mapping(
   TESTING=True,
 )
 
-
 @app.route('/', methods=['GET'])
 def home():
-  return '<h1>Dictionary API with google crawling</h1>'
+  return welcomeMessage
 
-@app.route('/usage', method=['GET'])
+@app.route('/usage', methods=['GET'])
 def usage():
-  return '<h1>Usage:/word=word&language=en-US</h1>'
+  return usageMessage
 
 @app.errorhandler(400)
-def badRequest(e):
-  return "<h1>400</h1><p>The resource could not be found.</p>", 400
+def badRequest():
+  return pageNotFoundErrorMessage, 400
 
 @app.errorhandler(404)
-def pageNotFound(e):
-  return "<h1>404</h1><p>The resource could not be found.</p>", 404
+def pageNotFound():
+  return badRequestErrorMessage, 404
+
+@app.errorhandler(422)
+def unprocessableEntity():
+  return unprocessableEntityMessage, 422
 
 @app.route('/dictionary-api/v1/', methods=['GET'])
 def apiSearch():
@@ -33,7 +38,7 @@ def apiSearch():
   if 'word' in request.args:
     searchWord = request.args['word']
   else:
-    return "Error: No word field provided. Please specify an searching word."
+    raise unprocessableEntity()
 
   # Check if an language was provided as part of the URL.
   # If language is provided, assign it to a variable.
@@ -41,7 +46,7 @@ def apiSearch():
   if 'language' in request.args:
     language = request.args['language']
   else:
-    return "Error: No language field provided. Please specify an searching language."
+    return unprocessableEntity()
 
   # get JSON which is about searching word
   # If it successfully finds, it returns "data" in type key
@@ -53,4 +58,4 @@ def apiSearch():
   return jsonify(result)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
