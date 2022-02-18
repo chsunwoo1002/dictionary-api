@@ -22,22 +22,24 @@ pageNotFoundErrorMessage = json.dumps(
 )
 notAllowedErrorMessage = json.dumps(
   {
-    "code": 405, 
-    "name": "Method Not Allowed", 
-    "description": "The method is not allowed for the requested URL."
+    'code': 405, 
+    'name': 'Method Not Allowed', 
+    'description': 'The method is not allowed for the requested URL.'
   }
 )
 badRequestErrorMessage = json.dumps(
   {
-    'code' : 400,
-    'detail' : '''server is unable to process the request sent by the client.'''
+    'code': 400, 
+    'name': 'Bad Request', 
+    'description': 'The browser (or proxy) sent a request that this server could not understand.'
   }
 )
 
 unprocessableEntityMessage = json.dumps(
   {
-    'code' : 422,
-    'detail' : '''server is unable to process the contained instructions. Please check parameters.'''
+   'code': 422, 
+   'name': 'Unprocessable Entity', 
+   'description': 'The request was well-formed but was unable to be followed due to semantic errors.'
   }
 )
 

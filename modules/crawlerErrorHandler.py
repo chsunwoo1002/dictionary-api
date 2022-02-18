@@ -1,27 +1,25 @@
 # Google Crawler error handler modules
+import json
 
-def pageNotFoundError():
-  errorMessage = {}
-  errorMessage["type"] = "error"
-  errorMessage["infomation"] = '''The Google page is not Found
-  please check the correctness of searching word'''
-  return errorMessage
+crawlerPageNotFoundErrorMessage = json.dumps(
+  {
+   'code': 400, 
+   'name': 'Not Found', 
+   'description': 'The requested URL was not found on Google. Please check your spelling and try again.'
+  }
+)
 
-def serverError():
-  errorMessage = {}
-  errorMessage["type"] = "error"
-  errorMessage["infomation"] = '''The Google sever error occurs
-  Please check the correctness of searching word'''
-  return errorMessage
+crawlerInternalServerErrorMessage = json.dumps(
+  {
+   'code': 500, 
+   'name': 'Internal Server Error', 
+   'description': '''Something has gone wrong on the Google's server, but the server could not be more specific on what the exact problem is.'''
+  }
+)
 
-def connectionError():
-  errorMessage = {}
-  errorMessage["type"] = "error"
-  errorMessage["infomation"] = "connection error with Google occurs, please try it later"
-  return errorMessage
-
-def HTTPError():
-  errorMessage = {}
-  errorMessage["type"] = "error"
-  errorMessage["infomation"] = "HTTP error with Google occurs , please try it later"
-  return errorMessage
+crawlerUncaughtErrorMessage = json.dumps(
+  {
+    'name': 'uncaught Error',
+    'description': 'The unkown error has been occured between server and Google. Please check your speeling and try again'
+  }
+)

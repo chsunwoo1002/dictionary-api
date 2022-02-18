@@ -8,16 +8,19 @@ def client():
     with app.test_client() as tester:
         yield tester
 
+# Testing welcome page
 def testAppHome(client):
   response = client.get('/')
   assert response.status_code == 200
   assert response.data.decode("utf-8") == welcomeMessage
 
+# Testing usage page
 def testAppUsage(client):
   response = client.get('/usage')
   assert response.status_code == 200
   assert response.data.decode("utf-8") == usageMessage
 
+# Testing valid API request
 def testValidRequest(client):
   response = client.get('/dictionary-api/v1/?word=apple&language=en-US')
   assert response.status_code == 200
