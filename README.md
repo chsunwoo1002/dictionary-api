@@ -7,10 +7,10 @@ For now, API supports English only(en-US)
 
 ## Usage
 Syntax usage
-GET https://dictionary-api-flask.herokuapp.com/dictionary-api/v1/word?word=<<--word-->>&language=<<--en-US-->>
+GET https://dictionary-api-flask.herokuapp.com/dictionary-api/v1/?word=<<--word-->>&language=<<--en-US-->>
   
 Example usage
-GET [https://dictionary-api-flask.herokuapp.com/dictionary-api/v1/word?word=example&language=en-US](https://dictionary-api-flask.herokuapp.com/dictionary-api/v1/word?word=example&language=en-US)
+GET [https://dictionary-api-flask.herokuapp.com/dictionary-api/v1/?word=example&language=en-US](https://dictionary-api-flask.herokuapp.com/dictionary-api/v1/word?word=example&language=en-US)
 
 ## Example output
 
@@ -130,6 +130,6 @@ GET [https://dictionary-api-flask.herokuapp.com/dictionary-api/v1/word?word=exam
   - [x] Parse data into JSON format
   - [x] Implement API with Flask
   - [x] Deploy API
-  - [ ] Write test cases
+  - [x] Write test cases
   - [ ] Implement CI/CD workflow
   - [ ] Support multiple languages
