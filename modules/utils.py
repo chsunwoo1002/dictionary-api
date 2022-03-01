@@ -1,4 +1,8 @@
 import json
+from functools import flat_map
+import pyspark
+from pyspark import SparkContext
+import googleDictionary
 
 # json variables for app
 welcomeMessage = json.dumps({'message':'Welcome to Dictionary API with google crawling'})
@@ -42,6 +46,17 @@ unprocessableEntityMessage = json.dumps(
    'description': 'The request was well-formed but was unable to be followed due to semantic errors.'
   }
 )
+
+# utils functions
+def getRelevantWords(word, type, language):
+  wordsList = []
+  if "meaning" in word and "definitions" in word["meaning"]:
+    word["meaning"]["definitions"].flat_map(lambda d: d[type] if type in d else [])
+  if len(wordsList) > 0:
+    rdd = SparkContext.parallelize(wordsList)
+    return list(rdd.map(lambda w: googleDictionary.queryWord(w, language)).filter("meaning" in rdd).collect())
+  else:
+    return wordsList
 
 # variables for crawling 
 callback, payload, results, entry = 'feature-callback', 'payload', 'single_results', 'entry'

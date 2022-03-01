@@ -22,7 +22,7 @@ def testAppUsage(client):
 
 # Testing valid API request
 def testValidRequest(client):
-  response = client.get('/dictionary-api/v1/?word=apple&language=en-US')
+  response = client.get('/dictionary-api/v1/word/?word=apple&language=en-US')
   assert response.status_code == 200
   data = json.loads(response.data.decode('utf-8'))
   assert "meaning" in data
