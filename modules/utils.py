@@ -3,7 +3,7 @@ from functools import flat_map
 import pyspark
 from pyspark import SparkContext
 import googleDictionary
-
+from flask import jsonify 
 # json variables for app
 welcomeMessage = json.dumps({'message':'Welcome to Dictionary API with google crawling'})
 usageMessage = json.dumps(
@@ -56,7 +56,7 @@ def getRelevantWords(word, type, language):
     rdd = SparkContext.parallelize(wordsList)
     return list(rdd.map(lambda w: googleDictionary.queryWord(w, language)).filter("meaning" in rdd).collect())
   else:
-    return wordsList
+    return jsonify(wordsList)
 
 # variables for crawling 
 callback, payload, results, entry = 'feature-callback', 'payload', 'single_results', 'entry'
@@ -64,3 +64,6 @@ headword, phonetics, senseFamilies = 'headword', 'phonetics', 'sense_families'
 text, oxfordAudio = 'text', 'oxford_audio'
 partsOfSpeech, value, senses = 'parts_of_speech', 'value', 'senses'
 definition, examples, exampleGroups, additionalExamples, thesaurusEntries, antonyms, synonyms,nym, nyms = 'definition','examples','example_groups','additional_examples','thesaurus_entries','antonyms','synonyms','nym', 'nyms'
+
+syn = "synonyms"
+ant = "antonyms"

@@ -62,12 +62,24 @@ def synonymsSearch():
   # get JSON which is about searching word
   # If it successfully finds, it returns "data" in type key
   # If it does not successfully find, it returns "error" in type key
-  result = queryWord(searchWord, language)
-
+  word = queryWord(searchWord, language)
+  result = getRelevantWords(word, syn, language)
   # Use the jsonify function from Flask to convert our list of
   # Python dictionaries to the JSON format.
-  return jsonify(result)
+  return result
 
+@app.route('/dictionary-api/v1/antonyms/', methods=['GET'])
+def synonymsSearch():
+  searchWord, language = argValidation(request.args)
+    
+  # get JSON which is about searching word
+  # If it successfully finds, it returns "data" in type key
+  # If it does not successfully find, it returns "error" in type key
+  word = queryWord(searchWord, language)
+  result = getRelevantWords(word, ant, language)
+  # Use the jsonify function from Flask to convert our list of
+  # Python dictionaries to the JSON format.
+  return result
 
 @app.route('/dictionary-api/v1/word/', methods=['GET'])
 def wordSearch():
