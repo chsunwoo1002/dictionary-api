@@ -21,18 +21,18 @@ def testNotAllowedError(tester):
 
 # Testing missing word parameters
 def testMissingWordParameters(tester):
-  response = tester.get('/dictionary-api/v1/?word=&language=en-US')
+  response = tester.get('/dictionary-api/v1/word/?word=&language=en-US')
   assert response.status_code == 422
   assert response.data.decode('utf-8') == unprocessableEntityMessage
 
 # Testing missing language parameters
 def testMissingLanguageParameters(tester):
-  response = tester.get('/dictionary-api/v1/?word=apple&language=')
+  response = tester.get('/dictionary-api/v1/word/?word=apple&language=')
   assert response.status_code == 422
   assert response.data.decode('utf-8') == unprocessableEntityMessage
 
 # Testing an invalid extra parameter
 def testBadRequest(tester):
-  response = tester.get('/dictionary-api/v1/?word=apple&language=en-US&extra=parameter')
+  response = tester.get('/dictionary-api/v1/word/?word=apple&language=en-US&extra=parameter')
   assert response.status_code == 400
   assert response.data.decode('utf-8') == badRequestErrorMessage
