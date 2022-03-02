@@ -1,8 +1,7 @@
 import json
-from functools import flat_map
 import pyspark
 from pyspark import SparkContext
-import googleDictionary
+import modules.googleDictionary as gd
 from flask import jsonify 
 # json variables for app
 welcomeMessage = json.dumps({'message':'Welcome to Dictionary API with google crawling'})
@@ -51,10 +50,11 @@ unprocessableEntityMessage = json.dumps(
 def getRelevantWords(word, type, language):
   wordsList = []
   if "meaning" in word and "definitions" in word["meaning"]:
-    word["meaning"]["definitions"].flat_map(lambda d: d[type] if type in d else [])
+    rddWords = SparkContext.parallelize(word["meaning"]["definitions"])
+    wordsList = list(rddWords.flatMap(lambda d : d[type] if type in d else []).collect())
   if len(wordsList) > 0:
     rdd = SparkContext.parallelize(wordsList)
-    return list(rdd.map(lambda w: googleDictionary.queryWord(w, language)).filter("meaning" in rdd).collect())
+    return list(rdd.map(lambda w: gd.queryWord(w, language)).filter("meaning" in rdd).collect())
   else:
     return jsonify(wordsList)
 
