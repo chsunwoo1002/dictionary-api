@@ -1,6 +1,6 @@
 from curses.ascii import HT
 from distutils.debug import DEBUG
-from flask import request, jsonify, Flask
+from flask import request, Flask
 from modules.googleDictionary import queryWord
 from modules.utils import *
 from werkzeug.exceptions import HTTPException, UnprocessableEntity, BadRequest
@@ -33,6 +33,7 @@ def handle_exception(e):
     return response
 
 def argValidation(args):
+
   # check length of parameters is correct
   if len(args) != 2:
     raise BadRequest
@@ -55,45 +56,43 @@ def argValidation(args):
   
   return searchWord, language
 
+
+# get string of selected word and language as arguments
+# return list of synonyms in JSON format
+# if error occurs, return error message in JSON format
 @app.route('/dictionary-api/v1/synonyms/', methods=['GET'])
 def synonymsSearch():
   searchWord, language = argValidation(request.args)
     
-  # get JSON which is about searching word
-  # If it successfully finds, it returns "data" in type key
-  # If it does not successfully find, it returns "error" in type key
   word = queryWord(searchWord, language)
+
   result = getRelevantWords(word, syn, language)
-  # Use the jsonify function from Flask to convert our list of
-  # Python dictionaries to the JSON format.
+
   return result
 
 
+# get string of selected word and language as arguments
+# return list of antonyms in JSON format
+# if error occurs, return error message in JSON format
 @app.route('/dictionary-api/v1/antonyms/', methods=['GET'])
 def antonymsSearch():
   searchWord, language = argValidation(request.args)
     
-  # get JSON which is about searching word
-  # If it successfully finds, it returns "data" in type key
-  # If it does not successfully find, it returns "error" in type key
   word = queryWord(searchWord, language)
+
   result = getRelevantWords(word, ant, language)
-  # Use the jsonify function from Flask to convert our list of
-  # Python dictionaries to the JSON format.
+
   return result
 
-
+# get string of selected word and language as arguments
+# return information of word in JSON format
+# if error occurs, return error message in JSON format
 @app.route('/dictionary-api/v1/word/', methods=['GET'])
 def wordSearch():
   searchWord, language = argValidation(request.args)
     
-  # get JSON which is about searching word
-  # If it successfully finds, it returns "data" in type key
-  # If it does not successfully find, it returns "error" in type key
   result = queryWord(searchWord, language)
 
-  # Use the jsonify function from Flask to convert our list of
-  # Python dictionaries to the JSON format.
   return result
 
 if __name__ == "__main__":
