@@ -5,6 +5,8 @@ from modules.googleDictionary import queryWord
 from modules.utils import *
 from werkzeug.exceptions import HTTPException, UnprocessableEntity, BadRequest
 
+from functools import reduce
+
 app = Flask(__name__)
 app.config.from_mapping(
   DEBUG=True,
@@ -65,8 +67,8 @@ def synonymsSearch():
   searchWord, language = argValidation(request.args)
     
   word = queryWord(searchWord, language)
-
-  result = getRelevantWords(word, syn, language)
+  data = json.loads(word.data.decode('utf-8'))
+  result = getRelevantWords(data, syn, language)
 
   return result
 
@@ -79,8 +81,8 @@ def antonymsSearch():
   searchWord, language = argValidation(request.args)
     
   word = queryWord(searchWord, language)
-
-  result = getRelevantWords(word, ant, language)
+  data = json.loads(word.data.decode('utf-8'))
+  result = getRelevantWords(data, ant, language)
 
   return result
 
@@ -94,6 +96,29 @@ def wordSearch():
   result = queryWord(searchWord, language)
 
   return result
+
+
+
+
+# functions to find synonyms and antonyms according to the word
+def getRelevantWords(word, type, language):
+  wordsList = []
+  s = []
+ 
+  if "meaning" in word:
+    for meaning in word["meaning"]:
+      for definition in meaning["definitions"]:
+        if type in definition:
+          wordsList += definition[type]
+    wordsList = list(filter(lambda w: not " " in w, wordsList))
+  for word in wordsList:
+    try:
+      w = queryWord(word, language)
+      k = json.loads(w.data.decode('utf-8'))
+      s.append(k)
+    except:
+      continue
+  return jsonify(s)
 
 if __name__ == "__main__":
     app.run()
