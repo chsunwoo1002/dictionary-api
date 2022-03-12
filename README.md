@@ -9,12 +9,25 @@ For now, API supports English only(en-US)
 
 Syntax usage
 
-GET https://dictionary-api-flask.herokuapp.com/dictionary-api/v1/?word=<<--word-->>&language=<<--en-US-->>
-  
-Example usage
+### Get definitions of word
+
+GET https://dictionary-api-flask.herokuapp.com/dictionary-api/v1/word/?word=<<--word-->>&language=<<--en-US-->>
+
+### Get all synonyms of word
+
+GET https://dictionary-api-flask.herokuapp.com/dictionary-api/v1/synonyms/?word=<<--word-->>&language=<<--en-US-->>
+
+### Get all antonyms of word
+
+GET https://dictionary-api-flask.herokuapp.com/dictionary-api/v1/antonyms/?word=<<--word-->>&language=<<--en-US-->>
+
+## Example
+
+### Example HTTP request
+
 GET [https://dictionary-api-flask.herokuapp.com/dictionary-api/v1/?word=example&language=en-US](https://dictionary-api-flask.herokuapp.com/dictionary-api/v1/word?word=example&language=en-US)
 
-## Example output
+### Example response output
 
 ```json
 {
@@ -136,5 +149,5 @@ GET [https://dictionary-api-flask.herokuapp.com/dictionary-api/v1/?word=example&
 - [x] Deploy API
 - [x] Write test cases
 - [x] Implement CI/CD workflow
+- [x] Implement synonyms/antonyms functionalities
 - [ ] Support multiple languages
-
